@@ -1,7 +1,7 @@
 import os
 import sys
 from typing import List
-import fitz # PyMuPDF
+import PyPDF2
 
 
 class TextFileLoader:
@@ -26,15 +26,16 @@ class TextFileLoader:
     def load_pdf(self):
         # Implement loading PDF files
         print("selfpath--->", self.path)
-        pdf_file = fitz.open(self.path)
         text = ""
-        for pdf_page in pdf_file:
-            print("pdf_page--->", pdf_page)
-            sys.stdout("pdf_page--->", pdf_page)
+        try:
+            with open(self.path, "rb") as file:
+                file_reader = PyPDF2.PdfReader(file)
+                for page in file_reader.pages:
+                    text += page.extract_text()
+                    self.documents.append(text)
+        except FileNotFoundError:
+                print("Reading File from PDF ERROR", pdf_file)
 
-            text += pdf_page.get_text()
-        self.documents.append(text)
-        pdf_file.close()
 
 
     def load_file(self):
