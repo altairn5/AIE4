@@ -1,5 +1,7 @@
 import os
+import sys
 from typing import List
+import fitz # PyMuPDF
 
 
 class TextFileLoader:
@@ -11,12 +13,29 @@ class TextFileLoader:
     def load(self):
         if os.path.isdir(self.path):
             self.load_directory()
-        elif os.path.isfile(self.path) and self.path.endswith(".txt"):
-            self.load_file()
+        elif os.path.isfile(self.path):
+            if self.path.endswith(".txt"):
+                self.load_file()
+            elif self.path.endswith(".pdf"):
+                self.load_pdf()
         else:
             raise ValueError(
                 "Provided path is neither a valid directory nor a .txt file."
             )
+        
+    def load_pdf(self):
+        # Implement loading PDF files
+        print("selfpath--->", self.path)
+        pdf_file = fitz.open(self.path)
+        text = ""
+        for pdf_page in pdf_file:
+            print("pdf_page--->", pdf_page)
+            sys.stdout("pdf_page--->", pdf_page)
+
+            text += pdf_page.get_text()
+        self.documents.append(text)
+        pdf_file.close()
+
 
     def load_file(self):
         with open(self.path, "r", encoding=self.encoding) as f:
@@ -52,12 +71,14 @@ class CharacterTextSplitter:
     def split(self, text: str) -> List[str]:
         chunks = []
         for i in range(0, len(text), self.chunk_size - self.chunk_overlap):
-            chunks.append(text[i : i + self.chunk_size])
+            portion = text[i : i + self.chunk_size]
+            chunks.append(portion)
         return chunks
 
     def split_texts(self, texts: List[str]) -> List[str]:
         chunks = []
         for text in texts:
+            # extend concats chunks form self.split(text)
             chunks.extend(self.split(text))
         return chunks
 
