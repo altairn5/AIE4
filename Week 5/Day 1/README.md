@@ -9,8 +9,8 @@ In today's assignment, we'll be fine-tuning embeddings!
   - Task 4: Fine-tuning `snowflake-arctic-embed-m`
   - Task 5: Evaluating our Retriever
 
-- 🤝 Breakout Room #2:
   - Task 1: Vibe Checking Our LCEL RAG Chain
+- 🤝 Breakout Room #2:
   - Task 2: Ragas Evaluation
     
 The notebook Colab link is located [here](https://colab.research.google.com/drive/1JouGwGBr7vl9s3gouxV8Yq_zX0MSVMaI?usp=sharing)
